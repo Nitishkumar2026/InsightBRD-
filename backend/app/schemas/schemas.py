@@ -17,6 +17,14 @@ class User(UserBase):
     class Config:
         from_attributes = True
 
+# Auth Schemas
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    username: Optional[str] = None
+
 # Project Schemas
 class ProjectBase(BaseModel):
     name: str
@@ -64,5 +72,21 @@ class Conflict(ConflictBase):
     project_id: UUID
     is_resolved: bool
     created_at: datetime
+    class Config:
+        from_attributes = True
+
+# Stakeholder Schemas
+class StakeholderBase(BaseModel):
+    name: str
+    role: Optional[str] = None
+    influence_score: Optional[float] = 1.0
+    email: Optional[EmailStr] = None
+
+class StakeholderCreate(StakeholderBase):
+    project_id: UUID
+
+class Stakeholder(StakeholderBase):
+    id: UUID
+    project_id: UUID
     class Config:
         from_attributes = True

@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   description: "Multi-channel requirement extraction and conflict analytics",
 };
 
+import ErrorBoundary from "@/components/ErrorBoundary";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -18,12 +20,14 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${inter.className} bg-background text-foreground antialiased`}>
-        <div className="flex min-h-screen">
-          <Sidebar />
-          <main className="flex-1 h-screen overflow-y-auto bg-slate-50/50 dark:bg-slate-930/50">
-            {children}
-          </main>
-        </div>
+        <ErrorBoundary>
+          <div className="flex h-screen overflow-hidden">
+            <Sidebar />
+            <main className="flex-1 overflow-y-auto bg-secondary/20">
+              {children}
+            </main>
+          </div>
+        </ErrorBoundary>
       </body>
     </html>
   );
