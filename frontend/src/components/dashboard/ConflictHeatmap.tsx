@@ -6,14 +6,26 @@ import { motion } from "framer-motion";
 const stakeholders = ["CTO", "PM", "Dev Team", "Sales", "Security"];
 const sources = ["Gmail", "Slack", "Transcripts", "Tech Doc", "Market Spec"];
 
-// Mock data: score 0-100 for conflict severity
-const generateData = () => {
-    return stakeholders.map(() => sources.map(() => Math.floor(Math.random() * 100)));
-};
-
-const data = generateData();
-
 export function ConflictHeatmap() {
+    const [data, setData] = React.useState<number[][]>([]);
+
+    React.useEffect(() => {
+        const stakeholders = ["CTO", "PM", "Dev Team", "Sales", "Security"];
+        const sources = ["Gmail", "Slack", "Transcripts", "Tech Doc", "Market Spec"];
+        const generated = stakeholders.map(() =>
+            sources.map(() => Math.floor(Math.random() * 100))
+        );
+        setData(generated);
+    }, []);
+
+    if (data.length === 0) {
+        return (
+            <div className="bg-card border rounded-2xl p-6 shadow-sm overflow-hidden min-h-[400px] flex items-center justify-center">
+                <p className="text-muted-foreground animate-pulse">Initializing heatmap...</p>
+            </div>
+        );
+    }
+
     return (
         <div className="bg-card border rounded-2xl p-6 shadow-sm overflow-hidden">
             <div className="mb-6">
@@ -34,7 +46,7 @@ export function ConflictHeatmap() {
                 {stakeholders.map((stakeholder, i) => (
                     <React.Fragment key={stakeholder}>
                         <div className="text-xs font-bold flex items-center">{stakeholder}</div>
-                        {data[i].map((severity, j) => (
+                        {data[i] && data[i].map((severity, j) => (
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 animate={{ opacity: 1, scale: 1 }}
