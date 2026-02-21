@@ -9,7 +9,8 @@ import {
     TrendingUp,
     Settings,
     PlusCircle,
-    Inbox
+    Inbox,
+    Zap
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -22,6 +23,7 @@ const sidebarItems = [
     { icon: FileText, label: "Requirements", href: "/requirements" },
     { icon: AlertTriangle, label: "Conflicts", href: "/conflicts" },
     { icon: TrendingUp, label: "Sentiment", href: "/sentiment" },
+    { icon: Zap, label: "Intelligence", href: "/intelligence" },
     { icon: Users, label: "Stakeholders", href: "/stakeholders" },
     { icon: Settings, label: "Settings", href: "/settings" },
 ];

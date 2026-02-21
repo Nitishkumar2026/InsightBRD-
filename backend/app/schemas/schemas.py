@@ -51,6 +51,22 @@ class RequirementBase(BaseModel):
 class RequirementCreate(RequirementBase):
     project_id: UUID
 
+class RequirementUpdate(BaseModel):
+    text: Optional[str] = None
+    category: Optional[str] = None
+    priority_score: Optional[float] = None
+    status: Optional[str] = None
+
+class RequirementRevision(BaseModel):
+    id: UUID
+    requirement_id: UUID
+    field_changed: str
+    old_value: str
+    new_value: str
+    created_at: datetime
+    class Config:
+        from_attributes = True
+
 class Requirement(RequirementBase):
     id: UUID
     project_id: UUID

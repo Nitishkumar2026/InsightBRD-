@@ -42,6 +42,19 @@ class Requirement(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     project = relationship("Project", back_populates="requirements")
+    revisions = relationship("RequirementRevision", back_populates="requirement")
+
+class RequirementRevision(Base):
+    __tablename__ = "requirement_revisions"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    requirement_id = Column(UUID(as_uuid=True), ForeignKey("requirements.id"))
+    field_changed = Column(String)
+    old_value = Column(Text)
+    new_value = Column(Text)
+    changed_by = Column(UUID(as_uuid=True), ForeignKey("users.id"))
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    requirement = relationship("Requirement", back_populates="revisions")
 
 class Stakeholder(Base):
     __tablename__ = "stakeholders"
