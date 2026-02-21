@@ -30,23 +30,49 @@ const models = [
 ];
 
 export default function SettingsPage() {
-    const [selectedModel, setSelectedModel] = React.useState("claude-3");
+    const [selectedModel, setSelectedModel] = React.useState("gpt-4");
+    const [apiKeys, setApiKeys] = React.useState({
+        openai: "",
+        anthropic: "",
+        slack: ""
+    });
+    const [saved, setSaved] = React.useState(false);
+
+    const handleSave = () => {
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2000);
+    };
 
     return (
         <div className="p-8 space-y-8 animate-fade-in">
-            <div>
-                <h1 className="text-3xl font-bold tracking-tight">System Settings</h1>
-                <p className="text-muted-foreground mt-1">Configure your AI pipeline, security, and external integrations.</p>
+            <div className="flex items-center justify-between">
+                <div>
+                    <h1 className="text-3xl font-bold tracking-tight">System Settings</h1>
+                    <p className="text-muted-foreground mt-1">Configure your AI pipeline, security, and external integrations.</p>
+                </div>
+                {saved && (
+                    <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center space-x-2"
+                    >
+                        <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                        <span className="text-xs font-bold text-emerald-500">Settings Saved</span>
+                    </motion.div>
+                )}
             </div>
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
                 <div className="xl:col-span-2 space-y-8">
                     {/* AI Configuration */}
                     <section className="bg-card border rounded-2xl p-6 shadow-sm">
-                        <h2 className="text-lg font-bold mb-6 flex items-center">
-                            <Cpu className="w-5 h-5 mr-2 text-primary" />
-                            AI Intelligence Model
-                        </h2>
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-lg font-bold flex items-center">
+                                <Cpu className="w-5 h-5 mr-2 text-primary" />
+                                AI Intelligence Model
+                            </h2>
+                            <span className="text-[10px] font-bold text-muted-foreground uppercase opacity-50">v4.0.0-neural</span>
+                        </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             {models.map((model) => (
                                 <div
@@ -62,12 +88,34 @@ export default function SettingsPage() {
                                         {selectedModel === model.id && <CheckCircle2 className="w-4 h-4 text-primary" />}
                                     </div>
                                     <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-tighter">{model.provider}</p>
-                                    <div className="mt-4 flex items-center justify-between text-[10px] font-medium">
-                                        <span className="text-muted-foreground">Quality: {model.quality}</span>
-                                        <span className="text-muted-foreground">Speed: {model.speed}</span>
-                                    </div>
                                 </div>
                             ))}
+                        </div>
+
+                        <div className="mt-8 space-y-4">
+                            <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Authentication Keys</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-bold uppercase text-muted-foreground ml-1">OpenAI API Key</label>
+                                    <input
+                                        type="password"
+                                        value={apiKeys.openai}
+                                        onChange={(e) => setApiKeys({ ...apiKeys, openai: e.target.value })}
+                                        placeholder="sk-..."
+                                        className="w-full bg-secondary/30 border rounded-xl p-3 text-sm focus:ring-2 ring-primary/20 outline-none"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-bold uppercase text-muted-foreground ml-1">Anthropic API Key</label>
+                                    <input
+                                        type="password"
+                                        value={apiKeys.anthropic}
+                                        onChange={(e) => setApiKeys({ ...apiKeys, anthropic: e.target.value })}
+                                        placeholder="ant-..."
+                                        className="w-full bg-secondary/30 border rounded-xl p-3 text-sm focus:ring-2 ring-primary/20 outline-none"
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </section>
 
@@ -75,31 +123,51 @@ export default function SettingsPage() {
                     <section className="bg-card border rounded-2xl p-6 shadow-sm">
                         <h2 className="text-lg font-bold mb-6 flex items-center">
                             <Database className="w-5 h-5 mr-2 text-indigo-500" />
-                            Channel Integrations
+                            Channel Connectors
                         </h2>
                         <div className="space-y-4">
                             {integrations.map((item) => (
-                                <div key={item.name} className="flex items-center justify-between p-4 rounded-2xl bg-secondary/50 border group">
-                                    <div className="flex items-center space-x-4">
-                                        <div className="p-3 rounded-xl bg-card border shadow-sm group-hover:scale-110 transition-transform">
-                                            <item.icon className="w-5 h-5" />
+                                <div key={item.name} className="p-4 rounded-2xl bg-secondary/50 border group">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <div className="flex items-center space-x-4">
+                                            <div className="p-3 rounded-xl bg-card border shadow-sm">
+                                                <item.icon className="w-5 h-5" />
+                                            </div>
+                                            <div>
+                                                <h3 className="font-bold">{item.name}</h3>
+                                                <p className="text-xs text-muted-foreground">Synchronize multi-channel data</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h3 className="font-bold">{item.name}</h3>
-                                            <p className="text-xs text-muted-foreground">Last sync: {item.lastSync}</p>
+                                        <div className="flex items-center space-x-3">
+                                            <span className={cn(
+                                                "text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-tighter",
+                                                item.status === "Connected" ? "bg-emerald-500/10 text-emerald-500" : "bg-slate-500/10 text-slate-500"
+                                            )}>
+                                                {item.status}
+                                            </span>
+                                            <button className="p-2 hover:bg-card rounded-lg transition-colors border border-transparent hover:border-border">
+                                                <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                                            </button>
                                         </div>
                                     </div>
-                                    <div className="flex items-center space-x-4">
-                                        <span className={cn(
-                                            "text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-tighter",
-                                            item.status === "Connected" ? "bg-emerald-500/10 text-emerald-500" : "bg-slate-500/10 text-slate-500"
-                                        )}>
-                                            {item.status}
-                                        </span>
-                                        <button className="text-muted-foreground hover:text-primary transition-colors">
-                                            <ExternalLink className="w-4 h-4" />
-                                        </button>
-                                    </div>
+                                    {item.name === "Slack" && (
+                                        <div className="mt-4 p-4 bg-card rounded-xl border border-dashed border-primary/20 space-y-3">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-[10px] font-bold uppercase text-muted-foreground">Bot User OAuth Token</span>
+                                                <CheckCircle2 className="w-3 h-3 text-emerald-500" />
+                                            </div>
+                                            <div className="flex space-x-2">
+                                                <input
+                                                    type="password"
+                                                    value={apiKeys.slack}
+                                                    onChange={(e) => setApiKeys({ ...apiKeys, slack: e.target.value })}
+                                                    placeholder="xoxb-..."
+                                                    className="flex-1 bg-secondary/20 border rounded-lg p-2 text-xs outline-none"
+                                                />
+                                                <button className="px-4 py-2 bg-primary text-primary-foreground text-[10px] font-bold rounded-lg hover:opacity-90">Test</button>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
@@ -111,42 +179,55 @@ export default function SettingsPage() {
                     <section className="bg-card border rounded-2xl p-6 shadow-sm ring-1 ring-primary/10">
                         <h2 className="text-lg font-bold mb-6 flex items-center text-primary">
                             <Shield className="w-5 h-5 mr-2" />
-                            Security Policy
+                            Global Security
                         </h2>
                         <div className="space-y-4">
-                            <div className="flex items-center justify-between p-3 rounded-xl bg-primary/5 border border-primary/10">
-                                <span className="text-xs font-bold">Encrypted Storage</span>
-                                <CheckCircle2 className="w-4 h-4 text-primary" />
+                            <div className="flex items-center justify-between p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
+                                <span className="text-xs font-bold">Encrypted Vault</span>
+                                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                             </div>
                             <div className="p-4 rounded-xl bg-secondary/50 space-y-3">
-                                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Access Key (Masked)</p>
-                                <code className="text-xs block p-2 bg-card rounded border truncate text-muted-foreground">
-                                    sk-ant-api03-Lhk...7jK2
-                                </code>
+                                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-relaxed">
+                                    All API keys are encrypted at rest using AES-256 and never logged.
+                                </p>
                             </div>
-                            <button className="w-full py-3 bg-gradient-to-r from-primary to-indigo-600 text-white rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:opacity-90 transition-opacity flex items-center justify-center space-x-2">
-                                <Save className="w-4 h-4" />
-                                <span>Save Configuration</span>
+                            <button
+                                onClick={handleSave}
+                                className="w-full py-4 bg-primary text-white rounded-2xl text-sm font-black shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center space-x-2 uppercase tracking-widest"
+                            >
+                                <Save className="w-5 h-5" />
+                                <span>Save Changes</span>
                             </button>
                         </div>
                     </section>
 
-                    {/* System Info */}
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-white shadow-xl shadow-slate-950/50">
-                        <h3 className="text-sm font-bold mb-4 opacity-50 uppercase tracking-widest">System Architecture</h3>
-                        <div className="space-y-3">
+                    {/* System State */}
+                    <div className="bg-slate-950 border border-slate-800 rounded-2xl p-6 text-white shadow-2xl shadow-slate-950/50">
+                        <div className="flex items-center justify-between mb-6">
+                            <h3 className="text-sm font-black uppercase tracking-widest text-slate-400">System Infra</h3>
+                            <div className="flex space-x-1">
+                                <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                                <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse delay-75" />
+                                <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse delay-150" />
+                            </div>
+                        </div>
+                        <div className="space-y-4">
                             <div className="flex items-center justify-between text-xs">
-                                <span className="opacity-60">Engine Version</span>
-                                <span className="font-mono text-emerald-400">v4.2.1-prod</span>
+                                <span className="opacity-60 font-medium">Core Engine</span>
+                                <span className="font-mono text-emerald-400">v4.5.1-prod</span>
                             </div>
                             <div className="flex items-center justify-between text-xs">
-                                <span className="opacity-60">Knowledge Graph</span>
-                                <span className="font-mono text-indigo-400">Neo4j Cluster 5.0</span>
+                                <span className="opacity-60 font-medium">Global Clusters</span>
+                                <span className="font-mono text-indigo-400">AWS / Neo4j</span>
+                            </div>
+                            <div className="flex items-center justify-between text-xs">
+                                <span className="opacity-60 font-medium">Uptime</span>
+                                <span className="font-mono text-emerald-400">99.98%</span>
                             </div>
                             <div className="mt-4 pt-4 border-t border-slate-800">
-                                <div className="flex items-center space-x-2 text-[10px] font-bold text-rose-500">
-                                    <AlertCircle className="w-3 h-3" />
-                                    <span>3 Security Patches Pending</span>
+                                <div className="flex items-center space-x-2 text-[10px] font-bold text-indigo-400">
+                                    <CheckCircle2 className="w-3 h-3" />
+                                    <span>All Core Services Operational</span>
                                 </div>
                             </div>
                         </div>

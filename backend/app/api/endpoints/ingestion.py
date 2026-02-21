@@ -68,8 +68,24 @@ async def upload_document(
     
     db.commit()
 
-    return {
-        "message": "File processed successfully",
-        "requirements_extracted": len(extracted_reqs),
-        "conflicts_detected": len(conflicts)
-    }
+from app.services.ingestion import IngestionService
+from typing import Dict, Any
+
+@router.post("/{project_id}/channel")
+async def ingest_from_channel(
+    project_id: UUID,
+    channel_data: Dict[str, Any],
+    db: Session = Depends(get_db)
+):
+    """
+    Ingest requirements from a specific external channel (Slack, Gmail).
+    """
+    result = await IngestionService.ingest_from_channel(
+        project_id=project_id,
+        channel_type=channel_data.get("type"),
+        config=channel_data.get("config", {}),
+        db=db
+    )
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    return result
