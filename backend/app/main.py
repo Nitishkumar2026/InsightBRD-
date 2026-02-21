@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.endpoints import projects, requirements, ingestion, auth, stakeholders, sentiment, intelligence
+from app.api.endpoints import projects, requirements, ingestion, auth, stakeholders, sentiment, intelligence, advisor
 from app.core.config import settings
 from app.db.session import engine, Base
 
