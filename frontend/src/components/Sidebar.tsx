@@ -35,8 +35,28 @@ export function Sidebar() {
     const pathname = usePathname();
     const [notification, setNotification] = React.useState<string | null>(null);
 
-    const handleNewProject = () => {
+    const handleNewProject = async () => {
         setNotification("Initializing Secure Workspace...");
+        try {
+            const res = await fetch("http://localhost:8000/api/v1/projects/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: `Project ${new Date().toLocaleDateString()}`,
+                    description: "Created via secure workspace initializer."
+                })
+            });
+
+            if (res.ok) {
+                setNotification("Project created successfully! Reloading...");
+                setTimeout(() => window.location.reload(), 1500);
+            } else {
+                setNotification("Failed to create project.");
+            }
+        } catch (err) {
+            console.error(err);
+            setNotification("Network error.");
+        }
         setTimeout(() => setNotification(null), 3000);
     };
 
