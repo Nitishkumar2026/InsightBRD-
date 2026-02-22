@@ -127,7 +127,7 @@ export default function RequirementsPage() {
     const categories = ["All", "Functional", "Non-Functional", "Constraint"];
 
     return (
-        <div className="p-8 space-y-8 max-w-[1400px] mx-auto animate-fade-in relative">
+        <div className="p-4 md:p-8 space-y-6 md:space-y-8 max-w-[1400px] mx-auto animate-fade-in relative">
             {/* Success Notification */}
             <AnimatePresence>
                 {seedSuccess && (
@@ -154,19 +154,19 @@ export default function RequirementsPage() {
             )}
 
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 pt-4 lg:pt-0">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Requirement Repository</h2>
-                    <p className="text-muted-foreground mt-1">Foundational blocks extracted from your communication channels.</p>
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Requirement Repository</h2>
+                    <p className="text-muted-foreground text-sm mt-1">Foundational blocks extracted from your communication channels.</p>
                 </div>
-                <div className="flex items-center space-x-3">
-                    <div className="flex bg-card border rounded-xl p-1">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    <div className="flex bg-card border rounded-xl p-1 overflow-x-auto no-scrollbar">
                         {categories.map(cat => (
                             <button
                                 key={cat}
                                 onClick={() => setSelectedCategory(cat)}
                                 className={cn(
-                                    "px-3 py-1.5 text-xs font-bold rounded-lg transition-all",
+                                    "px-3 py-1.5 text-[10px] md:text-xs font-bold rounded-lg transition-all whitespace-nowrap",
                                     selectedCategory === cat ? "bg-primary text-primary-foreground shadow-sm" : "hover:bg-secondary text-muted-foreground"
                                 )}
                             >
@@ -177,7 +177,7 @@ export default function RequirementsPage() {
                     <button
                         onClick={() => handleSeed("enron")}
                         disabled={isSeeding}
-                        className="flex items-center space-x-2 px-4 py-2 bg-primary text-primary-foreground rounded-xl shadow-lg shadow-primary/20 hover:scale-105 transition-transform disabled:opacity-50"
+                        className="flex items-center justify-center space-x-2 px-4 py-2 bg-primary text-primary-foreground rounded-xl shadow-lg shadow-primary/20 hover:scale-105 transition-transform disabled:opacity-50 h-fit"
                     >
                         <Zap className="w-4 h-4 fill-current" />
                         <span className="text-sm font-bold">{isSeeding ? "Syncing..." : "Rescan All"}</span>
@@ -186,18 +186,18 @@ export default function RequirementsPage() {
             </div>
 
             {/* Toolbar */}
-            <div className="flex items-center space-x-4">
-                <div className="relative flex-1">
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+                <div className="relative flex-1 w-full">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
                     <input
                         type="text"
-                        placeholder="Search requirements, categories, or tags..."
+                        placeholder="Search requirements..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 bg-card border rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium"
+                        className="w-full pl-10 pr-4 py-2.5 bg-card border rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium text-sm"
                     />
                 </div>
-                <button className="p-3 bg-card border rounded-2xl hover:bg-slate-50 transition-colors">
+                <button className="hidden sm:block p-2.5 bg-card border rounded-2xl hover:bg-slate-50 transition-colors">
                     <ArrowUpDown className="w-5 h-5 text-muted-foreground" />
                 </button>
             </div>
