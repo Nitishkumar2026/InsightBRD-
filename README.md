@@ -73,4 +73,10 @@ InsightBRD+ uses industry-standard encryption for all third-party integrations. 
 
 ---
 
-**Developed for the Next Generation of Software Architects.**  | [Explore Dashboard](http://localhost:3000)
+**Developed for the Next Generation of Software Architects.**  | [Explore Dashboard](https://insightbrd.netlify.app/)
+Dashboard
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0e3c7093-57e0-4743-b6eb-c39904b40193" />
+
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/df6b4181-0bd5-40ba-8d69-97d5a2952f0e" />
+
