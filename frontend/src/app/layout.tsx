@@ -23,7 +23,7 @@ export default function RootLayout({
         <ErrorBoundary>
           <div className="flex h-screen overflow-hidden">
             <Sidebar />
-            <main className="flex-1 overflow-y-auto bg-secondary/20">
+            <main className="flex-1 overflow-y-auto bg-secondary/20 mt-16 lg:mt-0 pt-4 lg:pt-0">
               {children}
             </main>
           </div>

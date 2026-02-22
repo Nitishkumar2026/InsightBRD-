@@ -132,7 +132,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="p-8 space-y-8 max-w-[1600px] mx-auto animate-fade-in relative min-h-screen">
+    <div className="p-4 md:p-8 space-y-6 md:space-y-8 max-w-[1600px] mx-auto animate-fade-in relative min-h-screen">
       {/* Success Notification (Seeding) */}
       <AnimatePresence>
         {seedSuccess && (
@@ -190,20 +190,20 @@ export default function Dashboard() {
       )}
 
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 lg:pt-0">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Executive Overview</h2>
-          <p className="text-muted-foreground mt-1 font-medium">Real-time requirement health and conflict analytics.</p>
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Executive Overview</h2>
+          <p className="text-muted-foreground mt-1 font-medium text-sm">Real-time requirement health and conflict analytics.</p>
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex flex-col xs:flex-row items-stretch xs:items-center gap-3">
           <div className="relative">
             <button
               onClick={() => setShowDemoMenu(!showDemoMenu)}
               disabled={isSeeding}
-              className="flex items-center space-x-2 px-4 py-2 bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 rounded-xl text-sm font-bold hover:bg-indigo-500/20 transition-all disabled:opacity-50"
+              className="w-full xs:w-auto flex items-center justify-center space-x-2 px-4 py-2 bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 rounded-xl text-sm font-bold hover:bg-indigo-500/20 transition-all disabled:opacity-50"
             >
               <Database className="w-4 h-4" />
-              <span>{isSeeding ? "Importing..." : "Import Demo Dataset"}</span>
+              <span>{isSeeding ? "Importing..." : "Demo Import"}</span>
             </button>
 
             <AnimatePresence>
@@ -233,14 +233,14 @@ export default function Dashboard() {
             </AnimatePresence>
           </div>
 
-          <div className="relative">
+          <div className="relative flex-1 xs:flex-none">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search projects..."
-              className="pl-10 pr-4 py-2 bg-card border rounded-full w-64 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium"
+              className="pl-10 pr-4 py-2 bg-card border rounded-full w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium text-sm"
             />
           </div>
         </div>
@@ -285,9 +285,9 @@ export default function Dashboard() {
       {/* Main Section: Projects and Insights */}
       <div className="space-y-8">
         {/* Project List - Now Full Width Content Area */}
-        <div className="bg-card border rounded-3xl p-8 shadow-sm space-y-6">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xl font-black tracking-tight flex items-center">
+        <div className="bg-card border rounded-3xl p-4 md:p-8 shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <h3 className="text-lg md:text-xl font-black tracking-tight flex items-center">
               <Layers className="w-5 h-5 mr-3 text-indigo-500" />
               Active Workspace Registry
             </h3>

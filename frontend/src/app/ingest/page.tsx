@@ -148,7 +148,7 @@ export default function IngestPage() {
     };
 
     return (
-        <div className="p-8 space-y-8 max-w-[1000px] mx-auto animate-fade-in relative">
+        <div className="p-4 md:p-8 space-y-6 md:space-y-8 max-w-[1000px] mx-auto animate-fade-in relative">
             <AnimatePresence>
                 {notification && (
                     <motion.div
@@ -163,9 +163,9 @@ export default function IngestPage() {
                 )}
             </AnimatePresence>
 
-            <div className="text-center space-y-2">
-                <h2 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white">Multi-Channel Ingestion</h2>
-                <p className="text-muted-foreground text-lg">Upload document, connect Gmail, or post meeting transcripts.</p>
+            <div className="text-center space-y-2 pt-4 lg:pt-0">
+                <h2 className="text-2xl md:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">Multi-Channel Ingestion</h2>
+                <p className="text-muted-foreground text-sm md:text-lg">Upload document, connect Gmail, or post meeting transcripts.</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
