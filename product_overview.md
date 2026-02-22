@@ -1,73 +1,83 @@
-# 🧠 InsightBRD+: Product & Technical Overview
+# 🧠 InsightBRD+: The Definitive Product & Technical Overview
 
-InsightBRD+ is an intelligent **SaaS platform** designed to bridge the gap between stakeholder communication and formal requirement documentation. It uses AI to extract, analyze, and resolve contradictions in complex projects.
-
----
-
-## 🏗️ 1. Core Modules (What does each part do?)
-
-### 📊 **Integrated Dashboard**
-- **Purpose**: A "Command Center" view of project health.
-- **Key Features**:
-  - **KPIs**: Quick stats on total requirements, active conflicts, and overall project sentiment.
-  - **Conflict Heatmap**: A visual grid showing which stakeholders have the most "friction" (disagreements).
-- **Why it matters**: It allows leadership to identify communication bottlenecks in seconds rather than reading hundreds of emails.
-
-### 📥 **Ingestion Pipeline**
-- **Purpose**: The "Entry Point" for all data.
-- **Connectors**: Slack, Gmail, PDF uploads, and Meeting Transcripts.
-- **Technical Action**: When a file/message is ingested, the **AI Pipeline** triggers to parse the text.
-- **Why it matters**: No more manual copying and pasting from Slack to Jira.
-
-### 📁 **Requirements Repository**
-- **Purpose**: The "Single Source of Truth."
-- **Functionality**: Every extracted requirement is stored here with metadata (Priority, Category, Source).
-- **Why it matters**: It provides a searchable database of every "promise" or "need" mentioned by any stakeholder.
-
-### ⚔️ **Conflict Engine**
-- **Purpose**: The "Resolver."
-- **How it works**: It compares requirements from different stakeholders. If Stakeholder A says "The button must be Red" and Stakeholder B says "The button must be Blue," it flags a **Conflict**.
-- **Resolution**: AI suggests a "Middle Ground" or highlights the trade-offs.
-
-### 🎭 **Sentiment & Stakeholder Analysis**
-- **Purpose**: Tracking the "Human Element."
-- **Sentiment**: Monitors if a stakeholder sounds frustrated, happy, or uncertain.
-- **Influence Mapping**: Identifies which stakeholders have the most power over the project's direction.
+InsightBRD+ is a state-of-the-art **AI-Powered Project Intelligence Platform**. It transforms passive project data—emails, chat messages, and documents—into an active, predictive knowledge graph that prevents project failure through neural analysis and real-world connectivity.
 
 ---
 
-## ⚙️ 2. How it Works (Technical Architecture)
+## 🚀 1. The Vision: Why InsightBRD+?
+Enterprise projects suffer from a **70% failure rate**, primarily due to "Requirement Drift" and "Stakeholder Friction." InsightBRD+ solves this by acting as an automated **Neural Business Analyst** that identifies risks before they manifest as delays.
 
-### **The Data Lifecycle**
-1.  **Ingestion**: RAW text data enters the system.
-2.  **AI Extraction**: We use LLMs (GPT/Claude) to identify "Requirements" (e.g., "Must have SSO").
-3.  **Analysis**: The engine calculates:
-    - **Priority Score (0-10)**: How critical is this?
-    - **Sentiment Score (-1 to 1)**: Is the tone positive or negative?
-    - **Mapping**: Connecting the requirement to a specific stakeholder.
-4.  **Vector Comparison**: Requirements are converted into "Vectors" (mathematical representations). If two vectors are close in meaning but opposite in intent, a conflict is detected.
+---
+
+## 🏗️ 2. Detailed Module Breakdown
+
+### 📊 **Module A: Intelligence Dashboard (Level 3)**
+The "Command Center" for project predictability.
+- **Stakeholder Alignment Score (SAS)**: A proprietary metric calculating the delta between contrasting stakeholder requirements. 
+- **Requirement Stability Index (RSI)**: Tracks "Volatility." High RSI indicates a requirement is being changed too often, signaling lack of clarity.
+- **Neural Risk Forecast**: A weighted AI model that synthesizes SAS, RSI, and project metadata to predict the probability of a "Red Stage" (critical delay).
+
+### 🔮 **Module B: Simulation & Advisor (Level 4)**
+Empowering decision-makers with outcome-based predictions.
+- **"What-if" Impact Simulator**: Uses a dependency graph to model the ripple effects of a change. (e.g., "If we delay SSO for 2 weeks, which other 5 modules will be blocked?").
+- **AI Negotiation Assistant**: When two stakeholders (e.g., Security vs. UX) disagree, the AI analyzes their influence profiles and project priorities to generate a **"Golden Middle" compromise proposal**.
+
+### 📥 **Module C: Multi-Channel Ingestion Engine**
+Seamless data gathering from where teams actually communicate.
+- **Smart Connectors**: Real-time sync with **Slack** channels and **Gmail** threads.
+- **Document AI**: High-fidelity PDF and Meeting Transcript extraction using LangChain.
+- **Source-to-Requirement Mapping**: Every requirement is traced back to its origin (URL, Email ID, or Slack Timestamp) for accountability.
+
+### 📁 **Module D: Evolutionary Repository**
+The "Single Source of Truth" with a memory.
+- **Revision Tracking**: Automatic versioning of every requirement change.
+- **Evolution Timeline**: A visual audit trail showing the "History of an Idea"—how a simple suggestion became a core requirement.
+
+---
+
+## ⚙️ 3. The Mathematical "Dimaag" (Intelligence Core)
+
+InsightBRD+ doesn't just "guess"; it calculates project health using:
+
+1.  **SAS Calculation**:
+    `SAS = (1 - (ActiveConflicts / TotalRequirements)) * 100` (Integrated with Sentiment Weighted Factors).
+2.  **RSI Determination**:
+    `RSI = (TotalRevisions / TimeInSystem) * ComplexityModifier`.
+3.  **Conflict Severity**:
+    Detected through **Semantic Similarity Vectors** using LLM embeddings.
+
+---
+
+## 🔗 4. Technical Architecture & Connectivity
+
+### **The Neural Chain**
+1.  **Capture**: Raw text from Slack/Gmail is fetched via `connectors/`.
+2.  **Parsing**: **LangChain + GPT-4o** perform structured extraction into JSON.
+3.  **Storage**: Relational data goes to **PostgreSQL**, while the "Ripple Effect" graph is stored in **Neo4j**.
+4.  **Analysis**: The **IntelligenceService** runs background calculations to update SAS/RSI.
+5.  **Viz**: **Next.js 15 & Framer Motion** render the data in high-performance meters and charts.
 
 ### **The Tech Stack**
-- **Frontend**: **Next.js 15 (Turbopack)** + **Tailwind CSS v4**.
-- **Backend**: **FastAPI** (Python). Fast and asynchronous.
-- **Database**:
-  - **Relational (SQLite/PostgreSQL)**: Stores users, projects, and requirements.
-  - **Graph (Neo4j)**: Maps the complex relationships between stakeholders and requirements.
+- **UI/UX**: Next.js 15 (Turbopack), Tailwind CSS v4, Lucide.
+- **API**: FastAPI (Python), uvicorn.
+- **AI**: LangChain, OpenAI, Anthropic.
+- **Security**: JWT Auth, AES-256 Encrypted Connector Vault.
 
 ---
 
-## 🔗 3. Connectivity (Why & How things are connected)
-
-### **Why Connect Slack/Gmail?**
-Requirements aren't just found in formal documents; they are hidden in daily chats. By connecting these, InsightBRD+ ensures **nothing is missed**.
-
-### **How is the AI connected?**
-The backend sends raw text to an AI Service. The response is "Structured JSON" which is then saved to our database and displayed on your frontend.
-
-### **Why the Conflict -> Sentiment connection?**
-A project with many conflicts often leads to negative stakeholder sentiment. By connecting these, we can predict if a project is going to fail before it actually happens.
+## 🎯 5. The Connectivity Map (How it all links)
+- **Ingestion -> Extraction**: Raw chat data creates New Requirements.
+- **Extraction -> Conflict**: Requirements from different sources trigger the Conflict Engine.
+- **Conflict -> Advisor**: Active conflicts trigger the AI Advisor for resolution.
+- **Revision -> Evolution**: Every update creates a Timeline event.
+- **Dependency -> Simulation**: Requirement links allow for Impact Modeling.
 
 ---
 
-## 🎯 4. The Value Proposition (The "Big Idea")
-InsightBRD+ solves the **"Communication Gap."** In large enterprises, 70% of project failures are due to poor requirements. This tool uses AI to act as an automated "Business Analyst" that works 24/7 to keep everyone on the same page.
+## 📋 6. Future Roadmap
+- **Project Memory 4.0**: Cross-project intelligence (Learning from past project failures to predict new ones).
+- **Automated JIRA Sync**: Converting resolved conflicts directly into Dev Tickets.
+- **Executive Voice Advisor**: Real-time audio reporting for Project Managers.
+
+---
+**InsightBRD+** is more than a tool; it is the **Neural Fabric** of modern project management.

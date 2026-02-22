@@ -73,6 +73,7 @@ class Requirement(RequirementBase):
     sentiment_score: float
     status: str
     created_at: datetime
+    stakeholder: Optional[Stakeholder] = None
     class Config:
         from_attributes = True
 
@@ -81,13 +82,19 @@ class ConflictBase(BaseModel):
     req_a_id: UUID
     req_b_id: UUID
     conflict_type: str
-    severity_score: float
+    severity_score: float = Field(alias="severity")
+    resolution_summary: str = Field(alias="suggestion")
+
+    class Config:
+        populate_by_name = True
 
 class Conflict(ConflictBase):
     id: UUID
     project_id: UUID
     is_resolved: bool
     created_at: datetime
+    req_a: Optional[Requirement] = None
+    req_b: Optional[Requirement] = None
     class Config:
         from_attributes = True
 

@@ -3,7 +3,7 @@
 import React from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
-const data = [
+const defaultData = [
     { name: "Mon", sentiment: 40, alignment: 24 },
     { name: "Tue", sentiment: 30, alignment: 13 },
     { name: "Wed", sentiment: 20, alignment: 98 },
@@ -13,7 +13,7 @@ const data = [
     { name: "Sun", sentiment: 34, alignment: 43 },
 ];
 
-export function SentimentChart() {
+export function SentimentChart({ data = defaultData }: { data?: any[] }) {
     return (
         <div className="bg-card border rounded-2xl p-6 shadow-sm h-[400px]">
             <div className="flex items-center justify-between mb-8">

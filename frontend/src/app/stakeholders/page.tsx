@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
-import { Users, UserPlus, Search, Mail, Filter, TrendingDown, TrendingUp, AlertCircle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Users, UserPlus, Search, Mail, Filter, TrendingDown, TrendingUp, AlertCircle, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const stakeholders = [
@@ -14,14 +14,43 @@ const stakeholders = [
 ];
 
 export default function StakeholdersPage() {
+    const [notification, setNotification] = React.useState<string | null>(null);
+
+    const handleContact = (name: string) => {
+        setNotification(`Drafting encrypted email to ${name}...`);
+        setTimeout(() => setNotification(null), 3000);
+    };
+
+    const handleAdd = () => {
+        setNotification("Opening Stakeholder Registration Secure Vault...");
+        setTimeout(() => setNotification(null), 3000);
+    };
+
     return (
-        <div className="p-8 space-y-8 animate-fade-in">
+        <div className="p-8 space-y-8 animate-fade-in relative">
+            <AnimatePresence>
+                {notification && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20, x: '-50%' }}
+                        animate={{ opacity: 1, y: 0, x: '-50%' }}
+                        exit={{ opacity: 0, y: -20, x: '-50%' }}
+                        className="fixed top-24 left-1/2 z-[100] px-6 py-3 bg-slate-900 text-white rounded-2xl shadow-2xl flex items-center space-x-3 font-bold"
+                    >
+                        <ShieldCheck className="w-5 h-5 text-emerald-500" />
+                        <span>{notification}</span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">Stakeholder Explorer</h1>
                     <p className="text-muted-foreground mt-1">Manage influence, alignment, and communication across the project.</p>
                 </div>
-                <button className="flex items-center space-x-2 bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all">
+                <button
+                    onClick={handleAdd}
+                    className="flex items-center space-x-2 bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all"
+                >
                     <UserPlus className="w-4 h-4" />
                     <span>Add Stakeholder</span>
                 </button>
@@ -105,7 +134,10 @@ export default function StakeholdersPage() {
                         </div>
 
                         <div className="mt-8 flex items-center space-x-2 pt-4 border-t relative">
-                            <button className="flex-1 flex items-center justify-center space-x-2 py-2 rounded-xl bg-secondary hover:bg-secondary/80 transition-colors text-xs font-bold">
+                            <button
+                                onClick={() => handleContact(person.name)}
+                                className="flex-1 flex items-center justify-center space-x-2 py-2 rounded-xl bg-secondary hover:bg-secondary/80 transition-colors text-xs font-bold"
+                            >
                                 <Mail className="w-3 h-3" />
                                 <span>Contact</span>
                             </button>

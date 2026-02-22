@@ -12,7 +12,8 @@ import {
     TrendingUp,
     Zap,
     Split,
-    MessageSquareShare
+    MessageSquareShare,
+    ShieldCheck
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -26,31 +27,52 @@ export default function SimulatePage() {
     const [selectedReq, setSelectedReq] = useState(mockRequirements[0]);
     const [simulationRunning, setSimulationRunning] = useState(false);
     const [result, setResult] = useState<any>(null);
+    const [delayWeeks, setDelayWeeks] = useState(4);
+    const [notification, setNotification] = useState<string | null>(null);
 
     const runSimulation = () => {
         setSimulationRunning(true);
         setResult(null);
+        setNotification("Calibrating Neural Impact Graph...");
 
         // Simulate API call delay
         setTimeout(() => {
+            const riskValue = 10 + (delayWeeks * 2) + Math.random() * 5;
             setResult({
-                affectedCount: 4,
-                riskDelta: "+18.5%",
-                sentimentDelta: "-0.4",
+                affectedCount: Math.floor(delayWeeks / 2) + 2,
+                riskDelta: `+${riskValue.toFixed(1)}%`,
+                sentimentDelta: `-${(delayWeeks * 0.1).toFixed(1)}`,
                 rippleEffect: [
                     "User Profile Data Access",
                     "Session Management timeout",
                     "Mobile App Login Flow",
                     "Third-party Auth Connectors"
                 ],
-                negotiationProposal: "Phase the SSO rollout: Start with internal users in July, then external in September."
+                negotiationProposal: delayWeeks > 6
+                    ? "Critical Risk: Delay exceeds safety margins. Recommend immediate scope reduction."
+                    : "Phase the rollout: Start with internal users in July, then external in September."
             });
             setSimulationRunning(false);
+            setNotification(null);
         }, 1500);
     };
 
     return (
-        <div className="p-8 max-w-5xl mx-auto space-y-8 animate-fade-in">
+        <div className="p-8 max-w-5xl mx-auto space-y-8 animate-fade-in relative">
+            <AnimatePresence>
+                {notification && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20, x: '-50%' }}
+                        animate={{ opacity: 1, y: 0, x: '-50%' }}
+                        exit={{ opacity: 0, y: -20, x: '-50%' }}
+                        className="fixed top-24 left-1/2 z-[100] px-6 py-3 bg-indigo-600 text-white rounded-2xl shadow-2xl flex items-center space-x-3 font-bold"
+                    >
+                        <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                        <span>{notification}</span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             <div>
                 <div className="flex items-center space-x-2 mb-2">
                     <Dna className="w-5 h-5 text-indigo-500" />
@@ -92,10 +114,17 @@ export default function SimulatePage() {
                                     <span className="text-xs font-bold text-muted-foreground uppercase">Parameter</span>
                                     <span className="text-xs font-bold text-primary uppercase">Delay Timeline</span>
                                 </div>
-                                <input type="range" className="w-full accent-primary" />
+                                <input
+                                    type="range"
+                                    min="1"
+                                    max="12"
+                                    value={delayWeeks}
+                                    onChange={(e) => setDelayWeeks(parseInt(e.target.value))}
+                                    className="w-full accent-primary"
+                                />
                                 <div className="flex justify-between mt-2">
                                     <span className="text-[10px] font-bold">Current: On Track</span>
-                                    <span className="text-[10px] font-bold text-rose-500">+4 Weeks Delay</span>
+                                    <span className="text-[10px] font-bold text-rose-500">+{delayWeeks} Weeks Delay</span>
                                 </div>
                             </div>
                         </div>
@@ -169,12 +198,12 @@ export default function SimulatePage() {
                                         </div>
                                         <p className="text-3xl font-black text-rose-600 tracking-tighter">{result.riskDelta}</p>
                                     </div>
-                                    <div className="p-6 bg-slate-500/5 border border-slate-500/20 rounded-2xl">
+                                    <div className="p-6 bg-secondary/50 border border-border rounded-2xl">
                                         <div className="flex items-center justify-between mb-2">
-                                            <span className="text-[10px] font-bold text-slate-500 uppercase">Sentiment Shift</span>
+                                            <span className="text-[10px] font-bold text-muted-foreground uppercase">Sentiment Shift</span>
                                             <TrendingDown className="w-4 h-4 text-rose-400" />
                                         </div>
-                                        <p className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">{result.sentimentDelta}</p>
+                                        <p className="text-3xl font-black text-foreground tracking-tighter">{result.sentimentDelta}</p>
                                     </div>
                                 </div>
 

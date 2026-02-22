@@ -8,6 +8,11 @@ from app.schemas import schemas
 
 router = APIRouter()
 
+@router.get("/", response_model=List[schemas.Requirement])
+def read_all_requirements(db: Session = Depends(get_db)):
+    requirements = db.query(models.Requirement).all()
+    return requirements
+
 @router.post("/", response_model=schemas.Requirement)
 def create_requirement(requirement: schemas.RequirementCreate, db: Session = Depends(get_db)):
     db_requirement = models.Requirement(**requirement.model_dump())

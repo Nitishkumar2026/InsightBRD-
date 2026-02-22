@@ -6,19 +6,25 @@ import { motion } from "framer-motion";
 const stakeholders = ["CTO", "PM", "Dev Team", "Sales", "Security"];
 const sources = ["Gmail", "Slack", "Transcripts", "Tech Doc", "Market Spec"];
 
-export function ConflictHeatmap() {
-    const [data, setData] = React.useState<number[][]>([]);
+export function ConflictHeatmap({ data: propData }: { data?: number[][] }) {
+    const [internalData, setInternalData] = React.useState<number[][]>([]);
 
     React.useEffect(() => {
-        const stakeholders = ["CTO", "PM", "Dev Team", "Sales", "Security"];
-        const sources = ["Gmail", "Slack", "Transcripts", "Tech Doc", "Market Spec"];
-        const generated = stakeholders.map(() =>
-            sources.map(() => Math.floor(Math.random() * 100))
-        );
-        setData(generated);
-    }, []);
+        if (propData && propData.length > 0) {
+            setInternalData(propData);
+        } else if (internalData.length === 0) {
+            const stakeholders = ["CTO", "PM", "Dev Team", "Sales", "Security"];
+            const sources = ["Gmail", "Slack", "Transcripts", "Tech Doc", "Market Spec"];
+            const generated = stakeholders.map(() =>
+                sources.map(() => Math.floor(Math.random() * 100))
+            );
+            setInternalData(generated);
+        }
+    }, [propData]);
 
-    if (data.length === 0) {
+    const displayData = propData || internalData;
+
+    if (displayData.length === 0) {
         return (
             <div className="bg-card border rounded-2xl p-6 shadow-sm overflow-hidden min-h-[400px] flex items-center justify-center">
                 <p className="text-muted-foreground animate-pulse">Initializing heatmap...</p>
@@ -46,7 +52,7 @@ export function ConflictHeatmap() {
                 {stakeholders.map((stakeholder, i) => (
                     <React.Fragment key={stakeholder}>
                         <div className="text-xs font-bold flex items-center">{stakeholder}</div>
-                        {data[i] && data[i].map((severity, j) => (
+                        {displayData[i] && displayData[i].map((severity, j) => (
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 animate={{ opacity: 1, scale: 1 }}

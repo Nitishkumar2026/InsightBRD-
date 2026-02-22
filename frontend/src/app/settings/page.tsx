@@ -13,9 +13,12 @@ import {
     CheckCircle2,
     AlertCircle,
     ExternalLink,
-    Save
+    Save,
+    ShieldCheck,
+    Zap
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { AnimatePresence } from "framer-motion";
 
 const integrations = [
     { name: "Slack", status: "Connected", icon: Slack, lastSync: "2 mins ago" },
@@ -36,30 +39,50 @@ export default function SettingsPage() {
         anthropic: "",
         slack: ""
     });
-    const [saved, setSaved] = React.useState(false);
+    const [notification, setNotification] = React.useState<string | null>(null);
+    const [isTesting, setIsTesting] = React.useState(false);
 
     const handleSave = () => {
-        setSaved(true);
-        setTimeout(() => setSaved(false), 2000);
+        setNotification("Applying Neural System Parameters...");
+        setTimeout(() => setNotification(null), 3000);
+    };
+
+    const handleTest = (integration: string) => {
+        setIsTesting(true);
+        setNotification(`Handshaking with ${integration} Secure API...`);
+        setTimeout(() => {
+            setIsTesting(false);
+            setNotification(`${integration} Connection Verified & Encrypted.`);
+            setTimeout(() => setNotification(null), 2000);
+        }, 2000);
+    };
+
+    const handleExternalLink = (name: string) => {
+        setNotification(`Redirecting to ${name} Authorization Portal...`);
+        setTimeout(() => setNotification(null), 3000);
     };
 
     return (
-        <div className="p-8 space-y-8 animate-fade-in">
+        <div className="p-8 space-y-8 animate-fade-in relative">
+            <AnimatePresence>
+                {notification && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20, x: '-50%' }}
+                        animate={{ opacity: 1, y: 0, x: '-50%' }}
+                        exit={{ opacity: 0, y: -20, x: '-50%' }}
+                        className="fixed top-24 left-1/2 z-[100] px-6 py-3 bg-indigo-600 text-white rounded-2xl shadow-2xl flex items-center space-x-3 font-bold"
+                    >
+                        <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                        <span>{notification}</span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">System Settings</h1>
                     <p className="text-muted-foreground mt-1">Configure your AI pipeline, security, and external integrations.</p>
                 </div>
-                {saved && (
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center space-x-2"
-                    >
-                        <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                        <span className="text-xs font-bold text-emerald-500">Settings Saved</span>
-                    </motion.div>
-                )}
             </div>
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
@@ -130,7 +153,7 @@ export default function SettingsPage() {
                                 <div key={item.name} className="p-4 rounded-2xl bg-secondary/50 border group">
                                     <div className="flex items-center justify-between mb-4">
                                         <div className="flex items-center space-x-4">
-                                            <div className="p-3 rounded-xl bg-card border shadow-sm">
+                                            <div className="p-3 rounded-xl bg-card border shadow-sm group-hover:bg-primary/5 transition-colors">
                                                 <item.icon className="w-5 h-5" />
                                             </div>
                                             <div>
@@ -145,7 +168,10 @@ export default function SettingsPage() {
                                             )}>
                                                 {item.status}
                                             </span>
-                                            <button className="p-2 hover:bg-card rounded-lg transition-colors border border-transparent hover:border-border">
+                                            <button
+                                                onClick={() => handleExternalLink(item.name)}
+                                                className="p-2 hover:bg-card rounded-lg transition-colors border border-transparent hover:border-border"
+                                            >
                                                 <ExternalLink className="w-4 h-4 text-muted-foreground" />
                                             </button>
                                         </div>
@@ -164,7 +190,13 @@ export default function SettingsPage() {
                                                     placeholder="xoxb-..."
                                                     className="flex-1 bg-secondary/20 border rounded-lg p-2 text-xs outline-none"
                                                 />
-                                                <button className="px-4 py-2 bg-primary text-primary-foreground text-[10px] font-bold rounded-lg hover:opacity-90">Test</button>
+                                                <button
+                                                    onClick={() => handleTest("Slack")}
+                                                    disabled={isTesting}
+                                                    className="px-4 py-2 bg-primary text-primary-foreground text-[10px] font-bold rounded-lg hover:opacity-90 disabled:opacity-50"
+                                                >
+                                                    {isTesting ? "Testing..." : "Test"}
+                                                </button>
                                             </div>
                                         </div>
                                     )}

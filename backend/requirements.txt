@@ -13,8 +13,13 @@ anthropic
 langchain
 langchain-openai
 langchain-anthropic
+langchain-google-genai
 python-dotenv
 redis
 boto3
 pytest
 httpx
+slack-sdk
+google-api-python-client
+google-auth-oauthlib
+cryptography

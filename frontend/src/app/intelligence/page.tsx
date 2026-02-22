@@ -27,6 +27,7 @@ const stabilityData = [
 
 export default function IntelligencePage() {
     const [loading, setLoading] = useState(true);
+    const [notification, setNotification] = useState<string | null>(null);
     const [metrics, setMetrics] = useState({
         alignment: 78.4,
         stability: 65.2,
@@ -37,6 +38,11 @@ export default function IntelligencePage() {
         const timer = setTimeout(() => setLoading(false), 800);
         return () => clearTimeout(timer);
     }, []);
+
+    const handleViewTimeline = () => {
+        setNotification("Generating comprehensive project evolution report...");
+        setTimeout(() => setNotification(null), 3000);
+    };
 
     if (loading) {
         return (
@@ -50,7 +56,21 @@ export default function IntelligencePage() {
     }
 
     return (
-        <div className="p-8 space-y-8 animate-fade-in max-w-[1600px] mx-auto">
+        <div className="p-8 space-y-8 animate-fade-in max-w-[1600px] mx-auto relative">
+            <AnimatePresence>
+                {notification && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20, x: '-50%' }}
+                        animate={{ opacity: 1, y: 0, x: '-50%' }}
+                        exit={{ opacity: 0, y: -20, x: '-50%' }}
+                        className="fixed top-24 left-1/2 z-[100] px-6 py-3 bg-indigo-600 text-white rounded-2xl shadow-2xl flex items-center space-x-3 font-bold"
+                    >
+                        <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                        <span>{notification}</span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             <div className="flex items-center justify-between">
                 <div>
                     <div className="flex items-center space-x-2 mb-1">
@@ -193,12 +213,12 @@ export default function IntelligencePage() {
                             { time: "1d ago", user: "AI", action: "Flagged", target: "Data Retention", color: "text-rose-500" },
                             { time: "2d ago", user: "Dev Lead", action: "Refined", target: "API Specs", color: "text-amber-500" },
                         ].map((log, i) => (
-                            <div key={i} className="flex items-start space-x-4 border-l-2 border-slate-100 pl-4 py-1 relative">
-                                <div className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-slate-300" />
+                            <div key={i} className="flex items-start space-x-4 border-l-2 border-secondary pl-4 py-1 relative">
+                                <div className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-border" />
                                 <div className="flex-1">
                                     <div className="flex items-center justify-between mb-1">
-                                        <span className="text-[10px] font-black uppercase text-slate-400 tracking-tighter">{log.time}</span>
-                                        <span className={cn("text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100", log.color)}>{log.action}</span>
+                                        <span className="text-[10px] font-black uppercase text-muted-foreground tracking-tighter">{log.time}</span>
+                                        <span className={cn("text-[10px] font-bold px-2 py-0.5 rounded-full bg-secondary", log.color)}>{log.action}</span>
                                     </div>
                                     <p className="text-xs font-bold">{log.target}</p>
                                     <p className="text-[10px] text-muted-foreground">Modified by {log.user}</p>
@@ -206,7 +226,10 @@ export default function IntelligencePage() {
                             </div>
                         ))}
                     </div>
-                    <button className="w-full mt-8 py-3 bg-secondary rounded-2xl text-xs font-bold hover:bg-secondary/80 transition-all flex items-center justify-center space-x-2">
+                    <button
+                        onClick={handleViewTimeline}
+                        className="w-full mt-8 py-3 bg-secondary rounded-2xl text-xs font-bold hover:bg-secondary/80 transition-all flex items-center justify-center space-x-2"
+                    >
                         <Clock className="w-4 h-4" />
                         <span>View Full Evolution Timeline</span>
                     </button>

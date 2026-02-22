@@ -32,6 +32,7 @@ class Requirement(Base):
     __tablename__ = "requirements"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     project_id = Column(UUID(as_uuid=True), ForeignKey("projects.id"))
+    stakeholder_id = Column(UUID(as_uuid=True), ForeignKey("stakeholders.id"), nullable=True) # Map to specific stakeholder
     text = Column(Text, nullable=False)
     source_type = Column(String) # email, slack, transcript, document
     source_ref = Column(String)
@@ -43,6 +44,20 @@ class Requirement(Base):
 
     project = relationship("Project", back_populates="requirements")
     revisions = relationship("RequirementRevision", back_populates="requirement")
+    stakeholder = relationship("Stakeholder")
+
+class SentimentPulse(Base):
+    __tablename__ = "sentiment_pulses"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    project_id = Column(UUID(as_uuid=True), ForeignKey("projects.id"))
+    stakeholder_id = Column(UUID(as_uuid=True), ForeignKey("stakeholders.id"))
+    score = Column(Float, nullable=False) # -1 to 1
+    comment_snippet = Column(Text)
+    source_type = Column(String) # slack, email
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    project = relationship("Project")
+    stakeholder = relationship("Stakeholder")
 
 class RequirementRevision(Base):
     __tablename__ = "requirement_revisions"
@@ -67,6 +82,18 @@ class Stakeholder(Base):
 
     project = relationship("Project", back_populates="stakeholders")
 
+class IntegrationToken(Base):
+    __tablename__ = "integration_tokens"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"))
+    provider = Column(String, nullable=False) # slack, google
+    access_token = Column(Text, nullable=False) # Encrypted
+    refresh_token = Column(Text) # Encrypted
+    expires_at = Column(DateTime)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User")
+
 class Conflict(Base):
     __tablename__ = "conflicts"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
@@ -78,3 +105,6 @@ class Conflict(Base):
     resolution_summary = Column(Text)
     is_resolved = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+    req_a = relationship("Requirement", foreign_keys=[req_a_id])
+    req_b = relationship("Requirement", foreign_keys=[req_b_id])

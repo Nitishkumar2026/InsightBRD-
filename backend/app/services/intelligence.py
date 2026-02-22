@@ -77,3 +77,63 @@ class IntelligenceService:
                 "volatility_risk": "High" if rsi < 70 else "Low"
             }
         }
+    @staticmethod
+    def detect_conflicts(project_id: str, db: Session) -> List[models.Conflict]:
+        """
+        HEURISTIC: Cross-compare requirements to find potential semantic contradictions.
+        In a real SaaS, this would use Gemini embeddings + vector similarity.
+        """
+        # [PROTOTYPE] Keep existing conflicts for demonstration
+        # db.query(models.Conflict).filter(
+        #     models.Conflict.project_id == project_id,
+        #     models.Conflict.is_resolved == False
+        # ).delete()
+
+        requirements = db.query(models.Requirement).filter(
+            models.Requirement.project_id == project_id
+        ).all()
+
+        detected = []
+        # Basic quadratic comparison (fine for prototype)
+        for i in range(len(requirements)):
+            for j in range(i + 1, len(requirements)):
+                req_a = requirements[i]
+                req_b = requirements[j]
+
+                # Rule 1: Shared category + opposing keywords (Prototype Mock)
+                # Example: "fast" vs "thorough/slow" in same category
+                is_conflict = False
+                severity = 0.5
+                conflict_type = "functional"
+
+                # Simulate detection logic (Langchain/Gemini would do this for real)
+                # Here we mock it with some simple logic
+                low_a = req_a.text.lower()
+                low_b = req_b.text.lower()
+
+                if req_a.category == req_b.category and req_a.category is not None:
+                    # Timeline conflict detection
+                    if "month" in low_a and "month" in low_b:
+                        is_conflict = True
+                        severity = 0.85
+                        conflict_type = "timeline"
+                    # Scope conflict detection
+                    elif "all" in low_a and "except" in low_b:
+                        is_conflict = True
+                        severity = 0.7
+                        conflict_type = "scope"
+
+                if is_conflict:
+                    conflict = models.Conflict(
+                        project_id=project_id,
+                        req_a_id=req_a.id,
+                        req_b_id=req_b.id,
+                        conflict_type=conflict_type,
+                        severity_score=severity,
+                        is_resolved=False
+                    )
+                    db.add(conflict)
+                    detected.append(conflict)
+        
+        db.commit()
+        return detected
